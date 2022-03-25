@@ -37,24 +37,33 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 	public async categorizeDocs() {
 		console.log(this.state.childTerms)
 		console.log(this.state.currentDataset)
+		let newArr = [];
+		let filteredArr = [];
 		this.state.childTerms[2].children.forEach(termItem => {
-			let filteredArr = [];
-			let newArr = [];
+			filteredArr.length > 0 ? newArr.push(filteredArr) : null
+			filteredArr = [];
+			// let newArr = [];
 			// console.log(e.defaultLabel)
 			this.state.currentDataset.forEach(docItem => {
-
 				// console.log(element2.ListItemAllFields.Brand_x0020_Location)
 				if (docItem.ListItemAllFields.Brand_x0020_Location)
 					if (docItem.ListItemAllFields.Brand_x0020_Location.Label == termItem.defaultLabel) {
 						console.log(docItem)
 						console.log(termItem.defaultLabel)
 						// let aa = element2.ListItemAllFields.Brand_x0020_Location.Label;
-					newArr = 	filteredArr.concat({ [termItem.defaultLabel]: docItem })
+					// newArr = 	filteredArr.concat({ [termItem.defaultLabel]: docItem })
+					filteredArr.push(docItem)
 					}
 			});
 			console.log(filteredArr)
-			console.log(newArr)
+			// console.log(newArr)
 		});
+		filteredArr.length > 0 ? newArr.push(filteredArr) : null
+		console.log(newArr)
+
+		
+
+
 		/* this.state.childTerms.forEach(outerTerm => {
 			// console.log(element.defaultLabel)
 			outerTerm.children.forEach(childTerm => {
