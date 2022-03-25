@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "atlas-brand-document-viewer-connect-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/atlasBrandDocumentViewerConnect/AtlasBrandDocumentViewerConnectWebPart.js",
+          "manifest": "./src/webparts/atlasBrandDocumentViewerConnect/AtlasBrandDocumentViewerConnectWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "AtlasBrandDocumentViewerConnectWebPartStrings": "lib/webparts/atlasBrandDocumentViewerConnect/loc/{locale}.js"
+  }
+}
