@@ -51,8 +51,8 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 						console.log(docItem)
 						console.log(termItem.defaultLabel)
 						// let aa = element2.ListItemAllFields.Brand_x0020_Location.Label;
-					// newArr = 	filteredArr.concat({ [termItem.defaultLabel]: docItem })
-					filteredArr.push(docItem)
+						// newArr = 	filteredArr.concat({ [termItem.defaultLabel]: docItem })
+						filteredArr.push(docItem)
 					}
 			});
 			console.log(filteredArr)
@@ -61,7 +61,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		filteredArr.length > 0 ? newArr.push(filteredArr) : null
 		console.log(newArr)
 
-		
+
 
 
 		/* this.state.childTerms.forEach(outerTerm => {
@@ -107,18 +107,28 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 	public render(): React.ReactElement<IAtlasBrandDocumentViewerConnectProps> {
 		return (
 			<div className={styles.atlasBrandDocumentViewerConnect}>
-				<div className={styles.container}>
-					<div className={styles.row}>
-						<div className={styles.column}>
-							<span className={styles.title}>Welcome to SharePoint!</span>
-							<p className={styles.subTitle}>Customize SharePoint experiences using Web Parts.</p>
-							<p className={styles.description}>{escape(this.props.description)}</p>
-							<a href="https://aka.ms/spfx" className={styles.button}>
-								<span className={styles.label}>Learn more</span>
-							</a>
-						</div>
-					</div>
-				</div>
+
+				<ul className={styles.library}>
+					<li className={styles.libraryName}>Activation</li>
+					<ul className={styles.folder}>
+						<li className={styles.folderName}>
+							<div>
+								<span>Activation Guidelines</span>
+								<i className="fa fa-angle-right icon-angle-right"></i>
+							</div>
+						</li>
+						<ul className={styles.docs}>
+							<li className={styles.doc}>
+								<span className="fa fa-star-o icon-star-empty"></span>
+								<a className={styles.doc} href="https://connectadmin.beamsuntory.com/CONNECT/brands/rum/cruzan/_layouts/15/WopiFrame.aspx?sourcedoc=/CONNECT/brands/rum/cruzan/Brand Documents/USA/Activation/2018 Cruzan Field Activation Guide PPT.pptx" >2018 Cruzan Field Activation Guide PPT</a>
+								<a className={styles.docDownload} href="/CONNECT/brands/rum/cruzan/Brand Documents/USA/Activation/2018 Cruzan Field Activation Guide PPT.pptx" download="">
+									<i className="fa fa-download icon-download-alt" ></i>
+								</a>
+							</li>
+						</ul>
+					</ul>
+				</ul>
+
 			</div>
 		);
 	}
