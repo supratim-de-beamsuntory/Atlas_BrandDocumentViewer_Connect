@@ -5,6 +5,9 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import { SPService } from '../services/SPService';
 import autobind from 'autobind-decorator';
 
+import { IoMdDownload } from "react-icons/io";
+
+
 export interface IAtlasBrandDocumentViewerConnectState {
 	currentDataset: any;
 	childTerms: any;
@@ -106,6 +109,10 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 	public render(): React.ReactElement<IAtlasBrandDocumentViewerConnectProps> {
 		return (
+		<>
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+			<script src='https://kit.fontawesome.com/a076d05399.js'
+				crossOrigin='anonymous'></script>
 			<div className={styles.atlasBrandDocumentViewerConnect}>
 
 				<ul className={styles.library}>
@@ -117,19 +124,21 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 								<i className="fa fa-angle-right icon-angle-right"></i>
 							</div>
 						</li>
-						<ul className={styles.docs}>
+						<ul className={styles.docs} style={{display:"block"}}  >
 							<li className={styles.doc}>
 								<span className="fa fa-star-o icon-star-empty"></span>
 								<a className={styles.doc} href="https://connectadmin.beamsuntory.com/CONNECT/brands/rum/cruzan/_layouts/15/WopiFrame.aspx?sourcedoc=/CONNECT/brands/rum/cruzan/Brand Documents/USA/Activation/2018 Cruzan Field Activation Guide PPT.pptx" >2018 Cruzan Field Activation Guide PPT</a>
-								<a className={styles.docDownload} href="/CONNECT/brands/rum/cruzan/Brand Documents/USA/Activation/2018 Cruzan Field Activation Guide PPT.pptx" download="">
-									<i className="fa fa-download icon-download-alt" ></i>
+								<a  data-interception="off" rel="noopener noreferrer" className="docDownload doc-download-link" href="/CONNECT/brands/rum/cruzan/Brand Documents/USA/Activation/2018 Cruzan Field Activation Guide PPT.pptx" download="">
+								<IoMdDownload />
 								</a>
 							</li>
 						</ul>
 					</ul>
 				</ul>
 
+
 			</div>
+			</>
 		);
 	}
 }
