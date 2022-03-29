@@ -6,7 +6,7 @@ import { SPService } from '../services/SPService';
 import autobind from 'autobind-decorator';
 
 import { IoMdDownload } from "react-icons/io";
-import { Accordion, Card, Table } from 'react-bootstrap';
+import { Accordion, Card, Col, Row, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
 
@@ -15,6 +15,7 @@ export interface IAtlasBrandDocumentViewerConnectState {
 	childTerms: any;
 	brandID: any;
 	groupedDataSet: any;
+	parentTermLabels: any;
 }
 
 export default class AtlasBrandDocumentViewerConnect extends React.Component<IAtlasBrandDocumentViewerConnectProps, IAtlasBrandDocumentViewerConnectState> {
@@ -28,7 +29,8 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 			currentDataset: [],
 			brandID: "",
 			childTerms: [],
-			groupedDataSet: []
+			groupedDataSet: [],
+			parentTermLabels: []
 		})
 
 	}
@@ -45,46 +47,46 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		console.log(this.state.childTerms)
 		console.log(this.state.currentDataset)
 		let newArr = [];
-		let filteredArr = [];
+		let parentTermLabels = [];
 		let finalArr = [];
 		this.state.childTerms.forEach(async childTerms => {
+			let filteredArr = [];
+			let flag = 0;
 			newArr.length > 0 ? finalArr.push(newArr) : null
 			newArr = []
 			childTerms.children.forEach(termItem => {
-				console.log(filteredArr)
-				console.log(newArr)
+
 				filteredArr.length > 0 ? newArr.push(filteredArr) : null
 				filteredArr = [];
-				console.log(filteredArr)
-			
-				this.state.currentDataset.forEach(async docItem => {
+
+				this.state.currentDataset.forEach(docItem => {
 					// console.log(element2.ListItemAllFields.Brand_x0020_Location)
 					if (docItem.ListItemAllFields.Brand_x0020_Location)
 						if (docItem.ListItemAllFields.Brand_x0020_Location.TermGuid == termItem.id) {
-							console.log(docItem)
-							console.log(termItem.defaultLabel)
 							// let aa = element2.ListItemAllFields.Brand_x0020_Location.Label;
 							// newArr = 	filteredArr.concat({ [termItem.defaultLabel]: docItem })
-							await filteredArr.push(docItem)
+							filteredArr.push(docItem)
+							flag = 1
 						}
 				});
-				console.log(filteredArr)
+				flag == 1 ? parentTermLabels.push(childTerms.defaultLabel) : null
+
 				// console.log(newArr)
 			});
-			filteredArr.length > 0 ? await newArr.push(filteredArr) : null
-			console.log(newArr)
-			console.log(finalArr);
-		
+			filteredArr.length > 0 ? newArr.push(filteredArr) : null
+
 		})
 		console.log(finalArr);
-		newArr.length > 0 ? await finalArr.push(newArr) : null
+		newArr.length > 0 ? finalArr.push(newArr) : null
 		console.log(finalArr);
-		
+		parentTermLabels = [... new Set(parentTermLabels)]
 		await this.setState({
-			groupedDataSet: finalArr
+			groupedDataSet: finalArr,
+			parentTermLabels: parentTermLabels
 		})
 		console.log(this.state.groupedDataSet)
 		console.log(this.state.groupedDataSet.length)
+		console.log(this.state.parentTermLabels)
 
 	}
 
@@ -109,10 +111,53 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 	public render(): React.ReactElement<IAtlasBrandDocumentViewerConnectProps> {
 		return (
 			<>
+				{this.state.groupedDataSet.length > 0
+					?
+					<Row>
+						{this.state.groupedDataSet.map((outerGroupDetail, i) => (
+							<>
+								{outerGroupDetail.length > 0 ?
+
+									<Col>
+										<h5>{this.state.parentTermLabels[i]}</h5>
+										{outerGroupDetail.map((groupDetail, i) => (
+											<Accordion>
+												<Card>
+													<Accordion.Toggle as={Card.Header} eventKey="0">
+														{groupDetail[0].ListItemAllFields.Brand_x0020_Location.Label}
+														{'      '}{i}
+													</Accordion.Toggle>
+													<Accordion.Collapse eventKey="0">
+														<Card.Body>
+															<Table responsive>
+																<thead>
+																	<th> Doc Name</th>
+																	<th> Doc Download </th>
+																</thead>
+																{groupDetail.map((itemDetail, j) => (
+																	<tbody>
+																		<td><a href={itemDetail.ListItemAllFields.ServerRedirectedEmbedUri}>{itemDetail.Name}</a></td>
+																	</tbody>
+																))}
+															</Table>
+														</Card.Body>
+													</Accordion.Collapse>
+												</Card>
+											</Accordion>
+										))}
+									</Col>
+									: null}
+							</>
+						))}
+					</Row>
+					:
+					<h3>Loading...</h3>
+				}
 				{/* Sup's Section */}
+				{/*
 				{this.state.groupedDataSet.length > 0 && this.state.groupedDataSet[0].length > 0 ?
-					<>	
-					<h3>Activation</h3>
+					<>
+						<h3>Activation</h3>
 						{this.state.groupedDataSet[0].map((groupDetail, i) => (
 							<Accordion>
 								<Card>
@@ -142,6 +187,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 					:
 					<h3>Loading... BBBBBB</h3>
 				}
+			*/}
 
 				{/* Rohans Secction */}
 				{/* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
