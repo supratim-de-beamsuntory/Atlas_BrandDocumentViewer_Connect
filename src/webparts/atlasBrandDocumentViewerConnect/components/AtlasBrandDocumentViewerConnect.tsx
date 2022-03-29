@@ -6,12 +6,15 @@ import { SPService } from '../services/SPService';
 import autobind from 'autobind-decorator';
 
 import { IoMdDownload } from "react-icons/io";
+import { Accordion, Card, Table } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
 
 
 export interface IAtlasBrandDocumentViewerConnectState {
 	currentDataset: any;
 	childTerms: any;
 	brandID: any;
+	groupedDataSet: any;
 }
 
 export default class AtlasBrandDocumentViewerConnect extends React.Component<IAtlasBrandDocumentViewerConnectProps, IAtlasBrandDocumentViewerConnectState> {
@@ -24,7 +27,8 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		this.state = ({
 			currentDataset: [],
 			brandID: "",
-			childTerms: []
+			childTerms: [],
+			groupedDataSet: []
 		})
 
 	}
@@ -42,51 +46,43 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		console.log(this.state.currentDataset)
 		let newArr = [];
 		let filteredArr = [];
-		this.state.childTerms[2].children.forEach(termItem => {
-			filteredArr.length > 0 ? newArr.push(filteredArr) : null
-			filteredArr = [];
-			// let newArr = [];
-			// console.log(e.defaultLabel)
-			this.state.currentDataset.forEach(docItem => {
-				// console.log(element2.ListItemAllFields.Brand_x0020_Location)
-				if (docItem.ListItemAllFields.Brand_x0020_Location)
-					if (docItem.ListItemAllFields.Brand_x0020_Location.Label == termItem.defaultLabel) {
-						console.log(docItem)
-						console.log(termItem.defaultLabel)
-						// let aa = element2.ListItemAllFields.Brand_x0020_Location.Label;
-						// newArr = 	filteredArr.concat({ [termItem.defaultLabel]: docItem })
-						filteredArr.push(docItem)
-					}
-			});
-			console.log(filteredArr)
-			// console.log(newArr)
-		});
-		filteredArr.length > 0 ? newArr.push(filteredArr) : null
-		console.log(newArr)
-
-
-
-
-		/* this.state.childTerms.forEach(outerTerm => {
-			// console.log(element.defaultLabel)
-			outerTerm.children.forEach(childTerm => {
-				let filteredArr = [];
-				// console.log(e.defaultLabel)
+		let finalArr = [];
+		this.state.childTerms.forEach(childTerms => {
+			newArr.length > 0 ? finalArr.push(newArr) : null
+			newArr = []
+			childTerms.children.forEach(termItem => {
+				console.log(filteredArr)
+				filteredArr.length > 0 ? newArr.push(filteredArr) : null
+				filteredArr = [];
+				console.log(filteredArr)
+			
 				this.state.currentDataset.forEach(docItem => {
-
 					// console.log(element2.ListItemAllFields.Brand_x0020_Location)
-					const mammals = ['chicks', 'heat', 'sleek'];
 					if (docItem.ListItemAllFields.Brand_x0020_Location)
-						if (docItem.ListItemAllFields.Brand_x0020_Location.Label == childTerm.defaultLabel) {
+						if (docItem.ListItemAllFields.Brand_x0020_Location.TermGuid == termItem.id) {
 							console.log(docItem)
-							console.log(childTerm.defaultLabel)
+							console.log(termItem.defaultLabel)
 							// let aa = element2.ListItemAllFields.Brand_x0020_Location.Label;
-							filteredArr.push({ [childTerm.defaultLabel]: docItem })
+							// newArr = 	filteredArr.concat({ [termItem.defaultLabel]: docItem })
+							filteredArr.push(docItem)
 						}
 				});
 				console.log(filteredArr)
+				// console.log(newArr)
 			});
-		}); */
+			filteredArr.length > 0 ? newArr.push(filteredArr) : null
+			console.log(newArr)
+		})
+		console.log(finalArr);
+		newArr.length > 0 ? finalArr.push(newArr) : null
+		console.log(finalArr);
+		
+		// await this.setState({
+		// 	groupedDataSet: newArr
+		// })
+		console.log(this.state.groupedDataSet)
+		console.log(this.state.groupedDataSet.length)
+
 	}
 
 	@autobind
@@ -109,8 +105,43 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 	public render(): React.ReactElement<IAtlasBrandDocumentViewerConnectProps> {
 		return (
-		<>
-			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
+			<>
+				{/* Sup's Section */}
+				{this.state.groupedDataSet.length > 0 ?
+					<>	
+					<h3>Activation</h3>
+						{this.state.groupedDataSet.map((groupDetail, i) => (
+							<Accordion>
+								<Card>
+									<Accordion.Toggle as={Card.Header} eventKey="0">
+										{groupDetail[0].ListItemAllFields.Brand_x0020_Location.Label}
+										{'      '}{i}
+									</Accordion.Toggle>
+									<Accordion.Collapse eventKey="0">
+										<Card.Body>
+											<Table responsive>
+												<thead>
+													<th> Doc Name</th>
+													<th> Doc Download </th>
+												</thead>
+												{groupDetail.map((itemDetail, j) => (
+													<tbody>
+														<td><a href={itemDetail.ListItemAllFields.ServerRedirectedEmbedUri}>{itemDetail.Name}</a></td>
+													</tbody>
+												))}
+											</Table>
+										</Card.Body>
+									</Accordion.Collapse>
+								</Card>
+							</Accordion>
+						))}
+					</>
+					:
+					<h3>Loading... BBBBBB</h3>
+				}
+
+				{/* Rohans Secction */}
+				{/* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"></link>
 			<script src='https://kit.fontawesome.com/a076d05399.js'
 				crossOrigin='anonymous'></script>
 			<div className={styles.atlasBrandDocumentViewerConnect}>
@@ -137,7 +168,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 				</ul>
 
 
-			</div>
+			</div> */}
 			</>
 		);
 	}

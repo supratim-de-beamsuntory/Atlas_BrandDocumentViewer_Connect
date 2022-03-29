@@ -10,9 +10,12 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as strings from 'AtlasBrandDocumentViewerConnectWebPartStrings';
 import AtlasBrandDocumentViewerConnect from './components/AtlasBrandDocumentViewerConnect';
 import { IAtlasBrandDocumentViewerConnectProps } from './components/IAtlasBrandDocumentViewerConnectProps';
+import { IPickerTerms, PrincipalType, PropertyFieldPeoplePicker, PropertyFieldTermPicker } from '@pnp/spfx-property-controls';
+
 
 export interface IAtlasBrandDocumentViewerConnectWebPartProps {
   description: string;
+  terms: IPickerTerms;
 }
 
 export default class AtlasBrandDocumentViewerConnectWebPart extends BaseClientSideWebPart<IAtlasBrandDocumentViewerConnectWebPartProps> {
@@ -22,7 +25,8 @@ export default class AtlasBrandDocumentViewerConnectWebPart extends BaseClientSi
       AtlasBrandDocumentViewerConnect,
       {
         description: this.properties.description,
-        context:this.context
+        context:this.context,
+        terms:this.properties.terms
       }
     );
 
@@ -50,7 +54,22 @@ export default class AtlasBrandDocumentViewerConnectWebPart extends BaseClientSi
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
-                })
+                }),
+                // PropertyFieldTermPicker('terms', {
+                //   label: 'Select terms',
+                //   panelTitle: 'Select terms',
+                //   initialValues: this.properties.terms,
+                //   allowMultipleSelections: false,
+                //   excludeSystemGroup: false,
+                //   onPropertyChange: this.onPropertyPaneFieldChanged,
+                //   properties: this.properties,
+                //   context: this.context,
+                //   onGetErrorMessage: null,
+                //   deferredValidationTime: 0,
+                //   limitByGroupNameOrID: 'ConnectModern',
+                //   // limitByTermsetNameOrID: 'Location',
+                //   key: 'termSetsPickerFieldId'
+                // })
               ]
             }
           ]
