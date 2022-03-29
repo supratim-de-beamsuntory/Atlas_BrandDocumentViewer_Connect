@@ -47,16 +47,17 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		let newArr = [];
 		let filteredArr = [];
 		let finalArr = [];
-		this.state.childTerms.forEach(childTerms => {
+		this.state.childTerms.forEach(async childTerms => {
 			newArr.length > 0 ? finalArr.push(newArr) : null
 			newArr = []
 			childTerms.children.forEach(termItem => {
 				console.log(filteredArr)
+				console.log(newArr)
 				filteredArr.length > 0 ? newArr.push(filteredArr) : null
 				filteredArr = [];
 				console.log(filteredArr)
 			
-				this.state.currentDataset.forEach(docItem => {
+				this.state.currentDataset.forEach(async docItem => {
 					// console.log(element2.ListItemAllFields.Brand_x0020_Location)
 					if (docItem.ListItemAllFields.Brand_x0020_Location)
 						if (docItem.ListItemAllFields.Brand_x0020_Location.TermGuid == termItem.id) {
@@ -64,22 +65,24 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 							console.log(termItem.defaultLabel)
 							// let aa = element2.ListItemAllFields.Brand_x0020_Location.Label;
 							// newArr = 	filteredArr.concat({ [termItem.defaultLabel]: docItem })
-							filteredArr.push(docItem)
+							await filteredArr.push(docItem)
 						}
 				});
 				console.log(filteredArr)
 				// console.log(newArr)
 			});
-			filteredArr.length > 0 ? newArr.push(filteredArr) : null
+			filteredArr.length > 0 ? await newArr.push(filteredArr) : null
 			console.log(newArr)
+			console.log(finalArr);
+		
 		})
 		console.log(finalArr);
-		newArr.length > 0 ? finalArr.push(newArr) : null
+		newArr.length > 0 ? await finalArr.push(newArr) : null
 		console.log(finalArr);
 		
-		// await this.setState({
-		// 	groupedDataSet: newArr
-		// })
+		await this.setState({
+			groupedDataSet: finalArr
+		})
 		console.log(this.state.groupedDataSet)
 		console.log(this.state.groupedDataSet.length)
 
@@ -107,10 +110,10 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		return (
 			<>
 				{/* Sup's Section */}
-				{this.state.groupedDataSet.length > 0 ?
+				{this.state.groupedDataSet.length > 0 && this.state.groupedDataSet[0].length > 0 ?
 					<>	
 					<h3>Activation</h3>
-						{this.state.groupedDataSet.map((groupDetail, i) => (
+						{this.state.groupedDataSet[0].map((groupDetail, i) => (
 							<Accordion>
 								<Card>
 									<Accordion.Toggle as={Card.Header} eventKey="0">
