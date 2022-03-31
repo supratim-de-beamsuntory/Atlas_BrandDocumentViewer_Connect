@@ -1,26 +1,27 @@
-
 @import "~office-ui-fabric-react/dist/sass/References.scss";
 @import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
-.atlasBrandDocumentViewerConnect {
-  font-family: "Oswald" !important;
 
-  .library {
-    float: left;
-    list-style-type: none;
-    padding-left: 0;
-    margin-right: 2em;
-    min-height: 12em;
-    min-height: 16em;
-    width: calc(33% - 1em);
-    background-color: #ededed;
+.library {
+  font-family: "Oswald" !important;
+  
+  float: left;
+  list-style-type: none;
+  padding-left: 0;
+  margin-right: 2em;
+  min-height: 12em;
+  min-height: 16em;
+  width: calc(33% - 1em);
+  background-color: #ededed;
 }
 .libraryName {
-  color: #fff;
-  background-color: #969696;
-  font-weight: 700;
-  font-size: 1.5em;
-  padding: 0.5em 0.75em;
-  border-bottom: 0.15em solid #fff;
+  font-family: "Oswald" !important;
+
+  color: #fff !important;
+  background-color: #969696 !important;
+  font-weight: 700 !important;
+  font-size: 1.5em !important;
+  padding: 0.5em 0.75em !important;
+  border-bottom: 0.15em solid #fff !important;
 }
 
 ul {
@@ -38,16 +39,19 @@ ul {
   background-color: #ededed;
 }
 .folderName {
-  font-size: 1.2em;
-  padding: 0.5em;
-  border-left: 3px solid #969696;
-  color: #969696;
-  background-color: #fff;
-  cursor: pointer;
+  font-family: "Oswald" !important;
+
+  font-size: 1.2em !important;
+  padding: 0.5em !important;
+  border-left: 3px solid #969696 !important;
+  color: #969696 !important;
+  background-color: #fff !important;
+  cursor: pointer !important;
 }
-.folder.active .folderName, .folderName:hover {
-  color: #000;
-  border-left-color: #CC0A0A;
+.folder.active .folderName,
+.folderName:hover {
+  color: #000 !important;
+  border-left-color: #cc0a0a !important;
 }
 .docs {
   list-style-type: none;
@@ -57,7 +61,6 @@ ul {
   background-color: #fff;
   border-top: 1px solid #969696;
 }
-
 
 .doc:last-child > a {
   border-bottom: none;
@@ -87,6 +90,84 @@ li {
   text-align: -webkit-match-parent;
 }
 
- 
-  
+.downloadBut {
+  color: #616161;
+  cursor: pointer;
+  margin-left: 3em;
 }
+.downloadBut:hover {
+  color: #cc0a0a;
+}
+.downloadBut:active {
+  color: #cc0a0a;
+}
+
+
+
+
+// body {
+//   margin:0px;
+//   font-family:'Roboto';
+//   text-align:center;
+// }
+
+.container {
+  font-family: "Oswald" !important;
+  color:#999;
+  text-transform: uppercase;
+  font-size:24px;
+  font-weight:bold;
+  // padding-top:200px;  
+  // position:fixed;
+  width:100%;
+  // bottom:45%;
+  display:block;
+}
+
+.flip {
+  height:35px;
+  overflow:hidden;
+}
+
+.flip > div > div {
+  color:#fff;
+  padding:1px 12px;
+  height:45px;
+  margin-bottom:45px;
+  display:inline-block;
+}
+
+.flip div:first-child {
+  animation: show 5s linear infinite;
+}
+
+.flip div div {
+  background:#42c58a;
+}
+.flip div:first-child div {
+  background:#00c5d9;
+}
+.flip div:last-child div {
+  background:#cc0a0a;
+}
+
+@keyframes show {
+  0% {margin-top:-270px;}
+  5% {margin-top:-180px;}
+  33% {margin-top:-180px;}
+  38% {margin-top:-90px;}
+  66% {margin-top:-90px;}
+  71% {margin-top:0px;}
+  99.99% {margin-top:0px;}
+  100% {margin-top:-270px;}
+}
+
+p {
+  position:fixed;
+  width:100%;
+  bottom:30px;
+  font-size:12px;
+  color:#999;
+  margin-top:200px;
+}
+

@@ -5,9 +5,14 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import { SPService } from '../services/SPService';
 import autobind from 'autobind-decorator';
 
-import { IoMdDownload } from "react-icons/io";
+import { IoMdDownload, IoIosArrowForward } from "react-icons/io";
 import { Accordion, Card, Col, Row, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
+
+import { Icon } from '@fluentui/react/lib/Icon';
+import { getFileTypeIconProps, FileIconType, initializeFileTypeIcons } from '@fluentui/react-file-type-icons';
+
+initializeFileTypeIcons(undefined);
 
 
 export interface IAtlasBrandDocumentViewerConnectState {
@@ -36,7 +41,10 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 	}
 
 	componentDidMount() {
-		let brandID = "Subbrand1647119834538"
+		// let brandID = "Subbrand1647119834538";
+
+		const myArray = window.location.href.split("/");
+		let brandID = myArray[myArray.length - 1].split(".")[0];
 		this.getTermsHierarchy();
 		this.getAllDocs(brandID);
 		// this.categorizeDocs();
@@ -118,25 +126,76 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 							<>
 								{outerGroupDetail.length > 0 ?
 
-									<Col>
-										<h5>{this.state.parentTermLabels[i]}</h5>
+									<Col style={{
+										float: "left",
+										fontFamily: "Oswald",
+										liststyletype: "none",
+										// paddingLeft: "0",
+										padding: "0",
+										marginRight: "2em",
+										minHeight: "16em",
+										// width: "calc(33% - 1em)",
+										// backgroundColor: "#ededed",
+
+									}}>
+										<h5 style={{
+											fontFamily: "Oswald",
+											color: "#fff",
+											backgroundColor: "rgb(0 0 0 / 68%)",
+											fontWeight: "350",
+											fontSize: "1.5em",
+											padding: "0.5em 0.75em",
+											borderBottom: "0.15em solid #fff",
+										}} >{this.state.parentTermLabels[i]}</h5>
 										{outerGroupDetail.map((groupDetail, i) => (
-											<Accordion>
-												<Card>
-													<Accordion.Toggle as={Card.Header} eventKey="0">
+											<Accordion style={{
+												margin: "0.5em",
+											}}>
+												<Card >
+													<Accordion.Toggle style={{
+														fontSize: "1.2em",
+														fontFamily: "Oswald",
+														padding: "0.5em",
+														borderleft: "3px solid #969696",
+														color: "#969696",
+														backgroundColor: "#fff",
+														cursor: "pointer"
+
+													}} className={styles.folderName}
+														as={Card.Header} eventKey="0">
 														{groupDetail[0].ListItemAllFields.Brand_x0020_Location.Label}
-														{'      '}{i}
+														{/* <i><IoIosArrowForward /></i> */}
+														{/* {'      '}{i} */}
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
-														<Card.Body>
+														<Card.Body className={styles.folderName}>
 															<Table responsive>
-																<thead>
-																	<th> Doc Name</th>
-																	<th> Doc Download </th>
-																</thead>
+																{/* <thead>
+																	<th>  Name</th>
+																	<th>  Download </th>
+																</thead> */}
 																{groupDetail.map((itemDetail, j) => (
 																	<tbody>
-																		<td><a href={itemDetail.ListItemAllFields.ServerRedirectedEmbedUri}>{itemDetail.Name}</a></td>
+																		<td><a target='_blank' data-interception="off" rel="noopener noreferrer" style={{
+																			display: "inline-block",
+																			padding: "1em 0",
+																			color: "#616161",
+																			cursor: "pointer"
+
+																		}} href={itemDetail.ListItemAllFields.ServerRedirectedEmbedUri}>
+																			<Icon style={{
+																				overflow: "initial"
+																			}}
+																				{...getFileTypeIconProps({
+																					extension: itemDetail.Name.split(".")[1],
+																					size: 20,
+																					imageFileType: 'svg'
+
+																				})} />{'      '}{itemDetail.Name}</a></td>
+																		<td style={{
+																			verticalAlign: "bottom"
+																		}}><a
+																			data-interception="off" rel="noopener noreferrer" href={"https://devbeam.sharepoint.com/sites/ModernConnect/_layouts/download.aspx?SourceUrl=" + itemDetail.ServerRelativeUrl} download> <IoMdDownload className={styles.downloadBut} /></a></td>
 																	</tbody>
 																))}
 															</Table>
@@ -150,8 +209,25 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 							</>
 						))}
 					</Row>
+
+					
 					:
-					<h3>Loading...</h3>
+					<div className={styles.container}>
+						Loading
+						<div className={styles.flip}>
+							<div><div>Data</div></div>
+							<div><div>Webpart</div></div>
+							<div><div>Content</div></div>
+						</div>
+						Please Wait!
+					</div>
+
+					// <h3 style={{
+					// 	fontSize: "1.2em",
+					// 	fontFamily: "Oswald"
+					// }}>Loading Content...</h3>
+
+
 				}
 				{/* Sup's Section */}
 				{/*
