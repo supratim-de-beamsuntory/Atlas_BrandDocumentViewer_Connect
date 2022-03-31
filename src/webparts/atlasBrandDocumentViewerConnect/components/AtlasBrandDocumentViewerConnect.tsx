@@ -47,7 +47,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		let brandID = myArray[myArray.length - 1].split(".")[0];
 		this.getTermsHierarchy();
 		this.getAllDocs(brandID);
-		// this.categorizeDocs();
+		this.categorizeDocs(); 
 	}
 
 	@autobind
