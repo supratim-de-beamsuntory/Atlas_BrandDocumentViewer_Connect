@@ -11,6 +11,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 import { Icon } from '@fluentui/react/lib/Icon';
 import { getFileTypeIconProps, FileIconType, initializeFileTypeIcons } from '@fluentui/react-file-type-icons';
+import ManageDocModal from './ManageDocModal';
+import { WebPartContext } from '@microsoft/sp-webpart-base';
+
 
 initializeFileTypeIcons(undefined);
 
@@ -21,15 +24,21 @@ export interface IAtlasBrandDocumentViewerConnectState {
 	brandID: any;
 	groupedDataSet: any;
 	parentTermLabels: any;
+
+
 }
 
 export default class AtlasBrandDocumentViewerConnect extends React.Component<IAtlasBrandDocumentViewerConnectProps, IAtlasBrandDocumentViewerConnectState> {
 
 	public SPService: SPService = null;
+	hrefString: string;
+
 
 	public constructor(props: IAtlasBrandDocumentViewerConnectProps) {
 		super(props);
 		this.SPService = new SPService(this.props.context);
+		this.hrefString = "";
+
 		this.state = ({
 			currentDataset: [],
 			brandID: "",
@@ -40,14 +49,18 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 	}
 
-	componentDidMount() {
+	public componentDidMount(): void {
 		// let brandID = "Subbrand1647119834538";
 
 		const myArray = window.location.href.split("/");
 		let brandID = myArray[myArray.length - 1].split(".")[0];
 		this.getTermsHierarchy();
 		this.getAllDocs(brandID);
-		this.categorizeDocs(); 
+		// this.categorizeDocs(); 
+		this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Brand%20Documents/${brandID}`;
+
+		console.log(this.hrefString);
+
 	}
 
 	@autobind
@@ -112,13 +125,15 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		console.log(allDocs)
 		this.setState({
 			currentDataset: allDocs
-		})
+		}, () => this.categorizeDocs())
 		// console.log(this.state.childTerms)
 	}
 
 	public render(): React.ReactElement<IAtlasBrandDocumentViewerConnectProps> {
 		return (
 			<>
+				{console.log(this.hrefString)}
+
 				{this.state.groupedDataSet.length > 0
 					?
 					<Row>
@@ -126,7 +141,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 							<>
 								{outerGroupDetail.length > 0 ?
 
-									<Col style={{
+									<Col lg={3} md={4} sm={6} xs={12} style={{
 										float: "left",
 										fontFamily: "Oswald",
 										liststyletype: "none",
@@ -169,13 +184,17 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 													</Accordion.Toggle>
 													<Accordion.Collapse eventKey="0">
 														<Card.Body className={styles.folderName}>
-															<Table responsive>
+															<Table style={{
+																fontSize: "0.8em",
+
+															}} responsive>
 																{/* <thead>
 																	<th>  Name</th>
 																	<th>  Download </th>
 																</thead> */}
 																{groupDetail.map((itemDetail, j) => (
-																	<tbody>
+																	<tbody
+																	>
 																		<td><a target='_blank' data-interception="off" rel="noopener noreferrer" style={{
 																			display: "inline-block",
 																			padding: "1em 0",
@@ -203,14 +222,39 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 													</Accordion.Collapse>
 												</Card>
 											</Accordion>
+
+
 										))}
 									</Col>
 									: null}
 							</>
 						))}
+
+						{/* <h5 style={{
+							fontFamily: "Oswald",
+							color: "#fff",
+							backgroundColor: "rgb(0 0 0 / 68%)",
+							fontWeight: "350",
+							fontSize: "1.5em",
+							padding: "0.5em 0.75em",
+							borderBottom: "0.15em solid #fff",
+							width: "100%"
+						}} >View All Documents</h5> */}
+<br></br>
+
+						<div>
+							<ManageDocModal  rackUrl={this.hrefString} />
+
+						</div>
+
+
+
 					</Row>
 
-					
+
+
+
+
 					:
 					<div className={styles.container}>
 						Loading

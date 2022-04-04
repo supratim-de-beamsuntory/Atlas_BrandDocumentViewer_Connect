@@ -1,6 +1,42 @@
 @import "~office-ui-fabric-react/dist/sass/References.scss";
 @import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
 
+:global(#workbenchPageContent) {
+  max-width: initial;
+}
+
+:global(.CanvasZone > div) {
+  width: 100%;
+} 
+
+@media (min-width: 768px) {
+  .modalXl  {
+    width: 95% !important;
+    height: 100% !important;
+    max-width: 1425px !important;
+  }
+}
+// @media (min-width: 576px){
+// .modal-dialog {
+//     max-width: 100% !important;
+//     height: 100% !important;
+//     /* margin: 1.75rem auto; */
+// }}
+
+// .addDocuments {
+//   box-sizing: unset;
+
+//   .docCard {
+//     border: none;
+
+//     .docCardHeader {
+//       width: 19em;
+//       border-bottom: 0;
+//       border: 1px solid rgba(0, 0, 0, 0.125);
+//     }
+//   }
+// }
+
 .library {
   font-family: "Oswald" !important;
   
@@ -162,12 +198,12 @@ li {
   100% {margin-top:-270px;}
 }
 
-p {
-  position:fixed;
-  width:100%;
-  bottom:30px;
-  font-size:12px;
-  color:#999;
-  margin-top:200px;
-}
+// p {
+//   position:fixed;
+//   width:100%;
+//   bottom:30px;
+//   font-size:12px;
+//   color:#999;
+//   margin-top:200px;
+// }
 
