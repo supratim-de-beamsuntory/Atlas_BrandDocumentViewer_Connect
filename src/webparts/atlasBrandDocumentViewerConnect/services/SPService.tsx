@@ -4,6 +4,8 @@ import { SPHttpClient, SPHttpClientResponse, SPHttpClientConfiguration } from '@
 import { Session } from "@pnp/sp-taxonomy";
 import "@pnp/sp/taxonomy";
 import { ITermStoreInfo } from "@pnp/sp/taxonomy";
+import { ICamlQuery } from "@pnp/sp/lists";
+import { IContentType } from "@pnp/sp/content-types";
 
 
 export class SPService {
@@ -59,6 +61,38 @@ export class SPService {
             console.error(err)
         }
 
+    }
 
+    public async getAllDocs2(selectedBrand) {
+        try {
+            // let listItems = await sp.web.lists.getByTitle("BrandDocuments").rootFolder.files.expand("ListItemAllFields").filter("ListItemAllFields/SubBrandID eq '" + selectedBrand + "'").get();
+
+            const caml: ICamlQuery = {
+                ViewXml: "<View Scope='RecursiveAll'></View>",
+                FolderServerRelativeUrl: `Brand%20Documents/${selectedBrand}`,
+
+
+            };
+
+            // const d: IContentType = await sp.web.contentTypes.getById("0x0101").fields();
+
+            // // log content type name to console
+            // console.log(d);
+
+            let listItems = await sp.web.lists.getByTitle("Brand Documents").getItemsByCAMLQuery(caml);
+            // let listItems = await sp.web.lists.getByTitle("Brand Documents").select('Name').getItemsByCAMLQuery(caml);
+            // const r: IContentType = await listItems.contentTypes.getById("0x0101").fields();
+
+            // // log content type name to console
+            // console.log(r);
+
+
+            return listItems;
+        }
+
+        catch (err) {
+            Promise.reject(err);
+        }
     }
 }
+
