@@ -6,7 +6,7 @@ import { SPService } from '../services/SPService';
 import autobind from 'autobind-decorator';
 
 import { IoMdDownload, IoIosArrowForward } from "react-icons/io";
-import { Accordion, Card, Col, Row, Table } from 'react-bootstrap';
+import { Accordion, Card, Col, Container, Row, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
 import { Icon } from '@fluentui/react/lib/Icon';
@@ -20,7 +20,7 @@ initializeFileTypeIcons(undefined);
 
 export interface IAtlasBrandDocumentViewerConnectState {
 	currentDataset: any;
-	childTerms: any;
+	allTerms: any;
 	brandID: any;
 	groupedDataSet: any;
 	parentTermLabels: any;
@@ -42,20 +42,29 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		this.state = ({
 			currentDataset: [],
 			brandID: "",
-			childTerms: [],
+			allTerms: [],
 			groupedDataSet: [],
 			parentTermLabels: []
 		})
 
 	}
 
-	public componentDidMount(): void {
-		// let brandID = "Subbrand1647119834538";
+	public async componentDidMount(): Promise<void> {
+		let brandID = "Subbrand1647119834538";
 
 		const myArray = window.location.href.split("/");
-		let brandID = myArray[myArray.length - 1].split(".")[0];
-		this.getTermsHierarchy();
-		this.getAllDocs(brandID);
+		// let brandID = myArray[myArray.length - 1].split(".")[0];
+
+		let allTerms = await this.getTermsHierarchy();
+		let allDocs = await this.getAllDocs(brandID);
+		await this.setState({
+			allTerms: allTerms,
+			currentDataset: allDocs
+		})
+		if (this.state.allTerms && this.state.currentDataset)
+			this.categorizeDocs();
+
+
 		// this.categorizeDocs(); 
 		this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Brand%20Documents/${brandID}`;
 
@@ -65,12 +74,12 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 	@autobind
 	public async categorizeDocs() {
-		console.log(this.state.childTerms)
+		console.log(this.state.allTerms)
 		console.log(this.state.currentDataset)
 		let newArr = [];
 		let parentTermLabels = [];
 		let finalArr = [];
-		this.state.childTerms.forEach(async childTerms => {
+		this.state.allTerms.forEach(async childTerms => {
 			let filteredArr = [];
 			let flag = 0;
 			newArr.length > 0 ? finalArr.push(newArr) : null
@@ -82,8 +91,8 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 				this.state.currentDataset.forEach(docItem => {
 					// console.log(element2.ListItemAllFields.Brand_x0020_Location)
-					if (docItem.ListItemAllFields.Brand_x0020_Location)
-						if (docItem.ListItemAllFields.Brand_x0020_Location.TermGuid == termItem.id) {
+					if (docItem.Brand_x0020_Location)
+						if (docItem.Brand_x0020_Location.TermGuid == termItem.id) {
 							// let aa = element2.ListItemAllFields.Brand_x0020_Location.Label;
 							// newArr = 	filteredArr.concat({ [termItem.defaultLabel]: docItem })
 							filteredArr.push(docItem)
@@ -114,18 +123,22 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 	@autobind
 	public async getTermsHierarchy() {
 		let childTree = await this.SPService.getTerms();
-		this.setState({
-			childTerms: childTree
-		}, () => this.categorizeDocs())
+		return childTree
+		// this.setState({
+		// 	allTerms: childTree
+		// }, () => this.categorizeDocs())
 	}
 
 	@autobind
 	public async getAllDocs(brandID) {
-		let allDocs = await this.SPService.getAllDocs(brandID)
+		// let allDocs = await this.SPService.getAllDocs(brandID)
+		let allDocs = await this.SPService.getAllDocs2(brandID)
+
 		console.log(allDocs)
-		this.setState({
-			currentDataset: allDocs
-		}, () => this.categorizeDocs())
+		return allDocs
+		// this.setState({
+		// 	currentDataset: allDocs
+		// }, () => this.categorizeDocs())
 		// console.log(this.state.childTerms)
 	}
 
@@ -136,101 +149,103 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 				{this.state.groupedDataSet.length > 0
 					?
-					<Row>
-						{this.state.groupedDataSet.map((outerGroupDetail, i) => (
-							<>
-								{outerGroupDetail.length > 0 ?
+					<Container>
+						<Row>
+							{this.state.groupedDataSet.map((outerGroupDetail, i) => (
+								<>
+									{outerGroupDetail.length > 0 ?
 
-									<Col lg={3} md={4} sm={6} xs={12} style={{
-										float: "left",
-										fontFamily: "Oswald",
-										liststyletype: "none",
-										// paddingLeft: "0",
-										padding: "0",
-										marginRight: "2em",
-										minHeight: "16em",
-										// width: "calc(33% - 1em)",
-										// backgroundColor: "#ededed",
-
-									}}>
-										<h5 style={{
+										<Col lg={3} md={4} sm={6} xs={12} style={{
+											float: "left",
 											fontFamily: "Oswald",
-											color: "#fff",
-											backgroundColor: "rgb(0 0 0 / 68%)",
-											fontWeight: "350",
-											fontSize: "1.5em",
-											padding: "0.5em 0.75em",
-											borderBottom: "0.15em solid #fff",
-										}} >{this.state.parentTermLabels[i]}</h5>
-										{outerGroupDetail.map((groupDetail, i) => (
-											<Accordion style={{
-												margin: "0.5em",
-											}}>
-												<Card >
-													<Accordion.Toggle style={{
-														fontSize: "1.2em",
-														fontFamily: "Oswald",
-														padding: "0.5em",
-														borderleft: "3px solid #969696",
-														color: "#969696",
-														backgroundColor: "#fff",
-														cursor: "pointer"
+											liststyletype: "none",
+											// paddingLeft: "0",
+											padding: "0",
+											marginRight: "2em",
+											minHeight: "16em",
+											// width: "calc(33% - 1em)",
+											// backgroundColor: "#ededed",
 
-													}} className={styles.folderName}
-														as={Card.Header} eventKey="0">
-														{groupDetail[0].ListItemAllFields.Brand_x0020_Location.Label}
-														{/* <i><IoIosArrowForward /></i> */}
-														{/* {'      '}{i} */}
-													</Accordion.Toggle>
-													<Accordion.Collapse eventKey="0">
-														<Card.Body className={styles.folderName}>
-															<Table style={{
-																fontSize: "0.8em",
+										}}>
+											<h5 style={{
+												fontFamily: "Oswald",
+												color: "#fff",
+												backgroundColor: "rgb(0 0 0 / 68%)",
+												fontWeight: "350",
+												fontSize: "1.5em",
+												padding: "0.5em 0.75em",
+												borderBottom: "0.15em solid #fff",
+											}} >{this.state.parentTermLabels[i]}</h5>
+											{outerGroupDetail.map((groupDetail, i) => (
+												<Accordion style={{
+													margin: "0.5em",
+												}}>
+													<Card >
+														<Accordion.Toggle style={{
+															fontSize: "1.2em",
+															fontFamily: "Oswald",
+															padding: "0.5em",
+															borderleft: "3px solid #969696",
+															color: "#969696",
+															backgroundColor: "#fff",
+															cursor: "pointer"
 
-															}} responsive>
-																{/* <thead>
+														}} className={styles.folderName}
+															as={Card.Header} eventKey="0">
+															{groupDetail[0].Brand_x0020_Location.Label}
+															{/* <i><IoIosArrowForward /></i> */}
+															{/* {'      '}{i} */}
+														</Accordion.Toggle>
+														<Accordion.Collapse eventKey="0">
+															<Card.Body className={styles.folderName}>
+																<Table style={{
+																	fontSize: "0.8em",
+
+																}} responsive>
+																	{/* <thead>
 																	<th>  Name</th>
 																	<th>  Download </th>
 																</thead> */}
-																{groupDetail.map((itemDetail, j) => (
-																	<tbody
-																	>
-																		<td><a target='_blank' data-interception="off" rel="noopener noreferrer" style={{
-																			display: "inline-block",
-																			padding: "1em 0",
-																			color: "#616161",
-																			cursor: "pointer"
+																	{groupDetail.map((itemDetail, j) => (
+																		<tbody
+																		>
+																			<td><a target='_blank' data-interception="off" rel="noopener noreferrer" style={{
+																				display: "inline-block",
+																				padding: "1em 0",
+																				color: "#616161",
+																				cursor: "pointer"
 
-																		}} href={itemDetail.ListItemAllFields.ServerRedirectedEmbedUri}>
-																			<Icon style={{
+																			}} href={itemDetail.ServerRedirectedEmbedUri}>
+																				{/* <Icon style={{
 																				overflow: "initial"
 																			}}
 																				{...getFileTypeIconProps({
-																					extension: itemDetail.Name.split(".")[1],
+																					extension: itemDetail.Title.split(".")[1],
 																					size: 20,
 																					imageFileType: 'svg'
 
-																				})} />{'      '}{itemDetail.Name}</a></td>
-																		<td style={{
-																			verticalAlign: "bottom"
-																		}}><a
-																			data-interception="off" rel="noopener noreferrer" href={"https://devbeam.sharepoint.com/sites/ModernConnect/_layouts/download.aspx?SourceUrl=" + itemDetail.ServerRelativeUrl} download> <IoMdDownload className={styles.downloadBut} /></a></td>
-																	</tbody>
-																))}
-															</Table>
-														</Card.Body>
-													</Accordion.Collapse>
-												</Card>
-											</Accordion>
+																				})} /> */}
+																				{'      '}{itemDetail.Title}</a></td>
+																			<td style={{
+																				verticalAlign: "bottom"
+																			}}><a
+																				data-interception="off" rel="noopener noreferrer" href={"https://devbeam.sharepoint.com/sites/ModernConnect/_layouts/download.aspx?SourceUrl=" + itemDetail.ServerRelativeUrl} download> <IoMdDownload className={styles.downloadBut} /></a></td>
+																		</tbody>
+																	))}
+																</Table>
+															</Card.Body>
+														</Accordion.Collapse>
+													</Card>
+												</Accordion>
 
 
-										))}
-									</Col>
-									: null}
-							</>
-						))}
+											))}
+										</Col>
+										: null}
+								</>
+							))}
 
-						{/* <h5 style={{
+							{/* <h5 style={{
 							fontFamily: "Oswald",
 							color: "#fff",
 							backgroundColor: "rgb(0 0 0 / 68%)",
@@ -240,17 +255,20 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 							borderBottom: "0.15em solid #fff",
 							width: "100%"
 						}} >View All Documents</h5> */}
-<br></br>
-
-						<div>
-							<ManageDocModal  rackUrl={this.hrefString} />
-
-						</div>
+							<br></br>
 
 
 
-					</Row>
 
+
+						</Row>
+						<Row>
+							<div>
+								<ManageDocModal rackUrl={this.hrefString} />
+
+							</div>
+						</Row>
+					</Container>
 
 
 
