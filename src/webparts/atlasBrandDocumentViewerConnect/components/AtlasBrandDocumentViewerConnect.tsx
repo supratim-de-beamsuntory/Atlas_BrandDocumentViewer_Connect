@@ -161,8 +161,9 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 											liststyletype: "none",
 											// paddingLeft: "0",
 											padding: "0",
-											marginRight: "3em",
-											marginLeft : "3em",
+											marginRight: "2em",
+											marginLeft : "2em",
+											// minWidth: "25em",
 											minHeight: "16em",
 											width: "calc(33% - 1em)",
 											// backgroundColor: "#ededed",
@@ -264,7 +265,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 						</Row>
 						<Row>
-							<div>
+							<div style={{width:"100%"}}>
 								<ManageDocModal rackUrl={this.hrefString} />
 
 							</div>
