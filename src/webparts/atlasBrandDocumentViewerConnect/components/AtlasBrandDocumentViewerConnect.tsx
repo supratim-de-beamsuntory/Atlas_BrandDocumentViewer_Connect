@@ -144,13 +144,13 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 	public render(): React.ReactElement<IAtlasBrandDocumentViewerConnectProps> {
 		return (
-			<>
+			<Container fluid>
 				{console.log(this.hrefString)}
 
 				{this.state.groupedDataSet.length > 0
 					?
-					<Container>
-						<Row>
+					<>
+						<Row >
 							{this.state.groupedDataSet.map((outerGroupDetail, i) => (
 								<>
 									{outerGroupDetail.length > 0 ?
@@ -161,9 +161,10 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 											liststyletype: "none",
 											// paddingLeft: "0",
 											padding: "0",
-											marginRight: "2em",
+											marginRight: "3em",
+											marginLeft : "3em",
 											minHeight: "16em",
-											// width: "calc(33% - 1em)",
+											width: "calc(33% - 1em)",
 											// backgroundColor: "#ededed",
 
 										}}>
@@ -268,7 +269,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 							</div>
 						</Row>
-					</Container>
+					</>
 
 
 
@@ -356,7 +357,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 
 			</div> */}
-			</>
+			</Container>
 		);
 	}
 }

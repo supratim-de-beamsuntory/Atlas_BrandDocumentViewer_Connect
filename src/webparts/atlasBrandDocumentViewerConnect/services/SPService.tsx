@@ -69,9 +69,7 @@ export class SPService {
 
             const caml: ICamlQuery = {
                 ViewXml: "<View Scope='RecursiveAll'></View>",
-                FolderServerRelativeUrl: `Brand%20Documents/${selectedBrand}`,
-
-
+                FolderServerRelativeUrl: `Brand%20Documents/${selectedBrand}`
             };
 
             // const d: IContentType = await sp.web.contentTypes.getById("0x0101").fields();
