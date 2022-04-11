@@ -17,6 +17,19 @@
     max-width: 1425px !important;
   }
 }
+
+.addDocuments {
+  box-sizing: unset;
+
+  .docCard {
+    border: none;
+    .docCardHeader {
+      width: 19em;
+      border-bottom: 0;
+      border: 1px solid rgba(0, 0, 0, 0.125);
+    }
+  }
+}
 // @media (min-width: 576px){
 // .modal-dialog {
 //     max-width: 100% !important;
