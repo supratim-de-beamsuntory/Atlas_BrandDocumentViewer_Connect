@@ -27,20 +27,31 @@ export default class ManageDocModal extends React.Component<any, any>{
 
         return (
             <>
-                <Button style={{
-							fontFamily: "Oswald",
-							color: "#fff",
-							backgroundColor: "rgb(0 0 0 / 68%)",
-							fontWeight: "350",
-							fontSize: "1.5em",
-							padding: "0.5em 0.75em",
-							borderBottom: "0.15em solid #fff",
-							width: "100%"
-						}} variant="primary" onClick={() => this.setShow(true)}>
+                {/* <Button style={{
+                    fontFamily: "Oswald",
+                    color: "#fff",
+                    backgroundColor: "rgb(0 0 0 / 68%)",
+                    fontWeight: "350",
+                    fontSize: "1.5em",
+                    padding: "0.5em 0.75em",
+                    borderBottom: "0.15em solid #fff",
+                    width: "100%"
+                }} variant="primary" onClick={() => this.setShow(true)}>
                     View All Documents
-                </Button>
+                </Button> */}
+                <div id="manageDocuments" className={styles.addDocuments}>
 
-                <Modal style={{height:"100%"}}
+                    <Card className={styles.docCard}>
+                        <Card.Header className={styles.docCardHeader}>
+                            {/* <a className="manage-docs btn btn-link" href="" type="button" data-toggle="modal" data-target="#document-modal" style={{ display: 'block', textAlign: 'left' }}>
+                                Rackhouse Documents
+                            </a> */}
+                            <p className="manage-docs btn" onClick={() => this.setShow(true)} style={{ display: 'block', textAlign: 'left' }}>View All Documents</p>
+                        </Card.Header>
+                    </Card>
+                </div>
+
+                <Modal style={{ height: "100%" }}
                     show={this.state.show}
                     onHide={() => this.setShow(false)}
                     dialogClassName={styles.modalXl}
@@ -48,19 +59,19 @@ export default class ManageDocModal extends React.Component<any, any>{
                 >
                     <Modal.Header closeButton>
                         <Modal.Title id="example-custom-modal-styling-title">
-                        View All Documents
+                            View All Documents
 
                         </Modal.Title>
                     </Modal.Header>
-                    <Modal.Body style={{height:"100%"}}>
-                        
+                    <Modal.Body style={{ height: "100%" }}>
+
                         <iframe src={this.props.rackUrl} width="100%" height="100%" />
 
                         {/* <h5>{this.props.rackUrl}</h5> */}
                     </Modal.Body>
                 </Modal>
 
-                
+
 
             </>
         );

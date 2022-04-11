@@ -14,6 +14,8 @@ import { getFileTypeIconProps, FileIconType, initializeFileTypeIcons } from '@fl
 import ManageDocModal from './ManageDocModal';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 
+import "./ManageDocModal.css"
+
 
 initializeFileTypeIcons(undefined);
 
@@ -24,27 +26,26 @@ export interface IAtlasBrandDocumentViewerConnectState {
 	brandID: any;
 	groupedDataSet: any;
 	parentTermLabels: any;
-
+	hrefString : any;
 
 }
 
 export default class AtlasBrandDocumentViewerConnect extends React.Component<IAtlasBrandDocumentViewerConnectProps, IAtlasBrandDocumentViewerConnectState> {
 
 	public SPService: SPService = null;
-	hrefString: string;
 
 
 	public constructor(props: IAtlasBrandDocumentViewerConnectProps) {
 		super(props);
 		this.SPService = new SPService(this.props.context);
-		this.hrefString = "";
 
 		this.state = ({
 			currentDataset: [],
 			brandID: "",
 			allTerms: [],
 			groupedDataSet: [],
-			parentTermLabels: []
+			parentTermLabels: [],
+			hrefString : ""
 		})
 
 	}
@@ -59,16 +60,17 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		let allDocs = await this.getAllDocs(brandID);
 		await this.setState({
 			allTerms: allTerms,
-			currentDataset: allDocs
+			currentDataset: allDocs,
+			hrefString :  `https://devbeam.sharepoint.com/sites/ModernConnect/Brand%20Documents/${brandID}`
 		})
 		if (this.state.allTerms && this.state.currentDataset)
 			this.categorizeDocs();
 
 
 		// this.categorizeDocs(); 
-		this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Brand%20Documents/${brandID}`;
+		// this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Brand%20Documents/${brandID}`;
 
-		console.log(this.hrefString);
+		console.log(this.state.hrefString);
 
 	}
 
@@ -145,8 +147,6 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 	public render(): React.ReactElement<IAtlasBrandDocumentViewerConnectProps> {
 		return (
 			<Container fluid>
-				{console.log(this.hrefString)}
-
 				{this.state.groupedDataSet.length > 0
 					?
 					<>
@@ -266,7 +266,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 						</Row>
 						<Row>
 							<div style={{width:"100%"}}>
-								<ManageDocModal rackUrl={this.hrefString} />
+								<ManageDocModal rackUrl={this.state.hrefString} />
 
 							</div>
 						</Row>
