@@ -5,4 +5,5 @@ export interface IAtlasBrandDocumentViewerConnectProps {
   description: string;
   context: WebPartContext;
   terms: IPickerTerms;
+  people: any;
 }

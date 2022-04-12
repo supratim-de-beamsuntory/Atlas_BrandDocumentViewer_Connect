@@ -51,10 +51,10 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 	}
 
 	public async componentDidMount(): Promise<void> {
-		let brandID = "Subbrand1647119834538";
+		// let brandID = "Subbrand1647119834538";
 
 		const myArray = window.location.href.split("/");
-		// let brandID = myArray[myArray.length - 1].split(".")[0];
+		let brandID = myArray[myArray.length - 1].split(".")[0];
 
 		let allTerms = await this.getTermsHierarchy();
 		let allDocs = await this.getAllDocs(brandID);
@@ -191,7 +191,6 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 															color: "#969696",
 															backgroundColor: "#fff",
 															cursor: "pointer"
-
 														}} className={styles.folderName}
 															as={Card.Header} eventKey="0">
 															{groupDetail[0].Brand_x0020_Location.Label}

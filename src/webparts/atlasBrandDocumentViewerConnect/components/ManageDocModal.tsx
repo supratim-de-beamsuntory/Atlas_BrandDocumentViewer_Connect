@@ -46,7 +46,7 @@ export default class ManageDocModal extends React.Component<any, any>{
                             {/* <a className="manage-docs btn btn-link" href="" type="button" data-toggle="modal" data-target="#document-modal" style={{ display: 'block', textAlign: 'left' }}>
                                 Rackhouse Documents
                             </a> */}
-                            <p className="manage-docs btn" onClick={() => this.setShow(true)} style={{ display: 'block', textAlign: 'left' }}>View All Documents</p>
+                            <a href="#"onClick={() => this.setShow(true)} style={{ cursor : "pointer" , color : "black"}}><strong>View All Documents</strong></a>
                         </Card.Header>
                     </Card>
                 </div>
