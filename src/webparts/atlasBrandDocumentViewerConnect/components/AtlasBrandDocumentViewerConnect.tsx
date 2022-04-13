@@ -29,6 +29,8 @@ export interface IAtlasBrandDocumentViewerConnectState {
 	hrefString: any;
 	currUserGroups: any;
 	displayFlag: boolean;
+	selectedItem: any;
+	selectedItemLabel: any;
 }
 
 export default class AtlasBrandDocumentViewerConnect extends React.Component<IAtlasBrandDocumentViewerConnectProps, IAtlasBrandDocumentViewerConnectState> {
@@ -48,7 +50,9 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 			parentTermLabels: [],
 			hrefString: "",
 			currUserGroups: [],
-			displayFlag: false
+			displayFlag: false,
+			selectedItem: [],
+			selectedItemLabel: ""
 		})
 
 	}
@@ -186,7 +190,9 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		//end
 		await this.setState({
 			groupedDataSet: finalArr,
-			parentTermLabels: parentTermLabels
+			parentTermLabels: parentTermLabels,
+			selectedItem: removedItem,
+			selectedItemLabel: removedHeading
 		})
 		console.log(this.state.groupedDataSet)
 		console.log(this.state.groupedDataSet.length)
@@ -218,6 +224,24 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 	public render(): React.ReactElement<IAtlasBrandDocumentViewerConnectProps> {
 		return (
 			<Container fluid>
+				<>
+					<div>
+						{this.state.selectedItem.length > 0 ?
+							<>
+								<h5>{this.state.selectedItemLabel}</h5>
+								{this.state.selectedItem[0].map((subItemGroup, i) => (
+									<>
+										{subItemGroup.map((itemDetail, j) => (
+											<p>	{itemDetail.Title}</p>
+										))}
+									</>
+								))}</>
+							: null
+
+						}
+
+					</div>
+				</>
 				{this.state.groupedDataSet.length > 0
 					?
 					<>
