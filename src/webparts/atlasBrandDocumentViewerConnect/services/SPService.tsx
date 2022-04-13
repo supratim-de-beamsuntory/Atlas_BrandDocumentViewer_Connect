@@ -1,11 +1,11 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { sp } from '@pnp/sp/presets/all';
 import { SPHttpClient, SPHttpClientResponse, SPHttpClientConfiguration } from '@microsoft/sp-http';
-import { Session } from "@pnp/sp-taxonomy";
-import "@pnp/sp/taxonomy";
-import { ITermStoreInfo } from "@pnp/sp/taxonomy";
+// import { Session } from "@pnp/sp-taxonomy";
+// import "@pnp/sp/taxonomy";
+// import { ITermStoreInfo } from "@pnp/sp/taxonomy";
 import { ICamlQuery } from "@pnp/sp/lists";
-import { IContentType } from "@pnp/sp/content-types";
+// import { IContentType } from "@pnp/sp/content-types";
 
 
 export class SPService {
@@ -91,6 +91,34 @@ export class SPService {
         catch (err) {
             Promise.reject(err);
         }
+    }
+
+    public checkUseFullname(userArray) {
+        var usrFullname = this.context.pageContext.user.displayName;
+        var GroupArray
+        if (userArray && userArray.length > 0) {
+            ///console.log(JSON.stringify(this.properties.people));
+
+            GroupArray = userArray.map((obj: { fullName: any; }) => {
+                return obj.fullName;
+            });
+            // console.log(GroupArray);//Array Of Group in property pane   
+
+            if (GroupArray.includes(usrFullname)) {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+    }
+
+    public async getUserGroups() {
+        var finalArray: any[];
+        let myGroups = await (await this.context.spHttpClient.get(`${this.context.pageContext.web.absoluteUrl}/_api/Web/CurrentUser/Groups`,
+            SPHttpClient.configurations.v1)).json();
+        // console.log(myGroups);
+        return myGroups
     }
 }
 

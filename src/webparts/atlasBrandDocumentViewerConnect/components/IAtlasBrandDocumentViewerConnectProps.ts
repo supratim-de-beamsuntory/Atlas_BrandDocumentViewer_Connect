@@ -4,6 +4,6 @@ import { IPickerTerms } from "@pnp/spfx-property-controls";
 export interface IAtlasBrandDocumentViewerConnectProps {
   description: string;
   context: WebPartContext;
-  terms: IPickerTerms;
+  // terms: IPickerTerms;
   people: any;
 }

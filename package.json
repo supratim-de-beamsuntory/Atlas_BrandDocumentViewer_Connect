@@ -9,7 +9,7 @@
     "test": "gulp test"
   },
   "dependencies": {
-    "@fluentui/react": "^8.56.1",
+    "@fluentui/react": "^8.49.0",
     "@fluentui/react-file-type-icons": "^8.5.13",
     "@microsoft/sp-core-library": "1.13.1",
     "@microsoft/sp-lodash-subset": "1.13.1",
@@ -19,7 +19,7 @@
     "@pnp/core": "^3.1.0",
     "@pnp/logging": "^3.1.0",
     "@pnp/queryable": "^3.1.0",
-    "@pnp/sp": "^2.13.0",
+    "@pnp/sp": "^2.11.0",
     "@pnp/spfx-controls-react": "3.5.0",
     "@pnp/spfx-property-controls": "^3.3.0",
     "autobind-decorator": "^2.4.0",
@@ -32,8 +32,7 @@
     "react-dom": "16.13.1",
     "react-icons": "^4.3.1",
     "react-infinite-scroll-component": "^6.1.0",
-    "social-media-icons-react": "^1.1.10",
-    "sp-pnp-js": "^3.0.10"
+    "social-media-icons-react": "^1.1.10"
   },
   "devDependencies": {
     "@types/react": "16.9.51",

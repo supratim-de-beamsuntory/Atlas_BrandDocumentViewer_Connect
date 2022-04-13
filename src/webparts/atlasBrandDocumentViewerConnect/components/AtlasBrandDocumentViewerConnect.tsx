@@ -9,7 +9,7 @@ import { IoMdDownload, IoIosArrowForward } from "react-icons/io";
 import { Accordion, Card, Col, Container, Row, Table } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
-import { Icon } from '@fluentui/react/lib/Icon';
+// import { Icon } from '@fluentui/react/lib/Icon';
 import { getFileTypeIconProps, FileIconType, initializeFileTypeIcons } from '@fluentui/react-file-type-icons';
 import ManageDocModal from './ManageDocModal';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
@@ -26,8 +26,9 @@ export interface IAtlasBrandDocumentViewerConnectState {
 	brandID: any;
 	groupedDataSet: any;
 	parentTermLabels: any;
-	hrefString : any;
-
+	hrefString: any;
+	currUserGroups: any;
+	displayFlag: boolean;
 }
 
 export default class AtlasBrandDocumentViewerConnect extends React.Component<IAtlasBrandDocumentViewerConnectProps, IAtlasBrandDocumentViewerConnectState> {
@@ -45,23 +46,33 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 			allTerms: [],
 			groupedDataSet: [],
 			parentTermLabels: [],
-			hrefString : ""
+			hrefString: "",
+			currUserGroups: [],
+			displayFlag: false
 		})
 
 	}
 
+	componentDidUpdate() {
+		// Typical usage (don't forget to compare props):
+		if (this.props.people !== this.props.people) {
+			this.getUserGroups2();
+		}
+	}
+
 	public async componentDidMount(): Promise<void> {
 		// let brandID = "Subbrand1647119834538";
-
+		this.getUserGroups2();
 		const myArray = window.location.href.split("/");
 		let brandID = myArray[myArray.length - 1].split(".")[0];
 
 		let allTerms = await this.getTermsHierarchy();
 		let allDocs = await this.getAllDocs(brandID);
+		this.getUserGroups2();
 		await this.setState({
 			allTerms: allTerms,
 			currentDataset: allDocs,
-			hrefString :  `https://devbeam.sharepoint.com/sites/ModernConnect/Brand%20Documents/${brandID}`
+			hrefString: `https://devbeam.sharepoint.com/sites/ModernConnect/Brand%20Documents/${brandID}`
 		})
 		if (this.state.allTerms && this.state.currentDataset)
 			this.categorizeDocs();
@@ -71,6 +82,53 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		// this.hrefString = `https://devbeam.sharepoint.com/sites/ModernConnect/Brand%20Documents/${brandID}`;
 
 		console.log(this.state.hrefString);
+
+	}
+
+	@autobind
+	public async getUserGroups2() {
+
+		let usrGroups = await this.SPService.getUserGroups();
+		// console.log(usrGroups);
+		this.setState({
+			currUserGroups: usrGroups,
+
+		});
+		// console.log(this.state.currUserGroups);
+
+		this.categorizeGroups();
+	}
+
+	@autobind
+	public categorizeGroups() {
+		this.setState({
+			displayFlag: false
+		})
+		let response = this.state.currUserGroups;
+		var finalArray = response.value.map(function (obj: { Title: any; }) {
+			return obj.Title;
+		});
+		// console.log(finalArray);
+		// console.log(this.props.people);
+		var usrFullname = this.SPService.checkUseFullname(this.props.people);
+		// console.log(usrFullname);
+		if (this.props.people) {
+			for (let i = 0; i < this.props.people.length; i++) {
+				console.log(this.props.people[i].fullName);
+				if (finalArray.includes(this.props.people[i].fullName) || usrFullname) {
+					// console.log("User Can view this section...!!");
+					this.setState({
+						displayFlag: true
+					})
+					this.render();
+				}
+				else {
+					this.setState({
+						displayFlag: false
+					})
+				}
+			}
+		}
 
 	}
 
@@ -162,7 +220,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 											// paddingLeft: "0",
 											padding: "0",
 											marginRight: "2em",
-											marginLeft : "2em",
+											marginLeft: "2em",
 											// minWidth: "25em",
 											minHeight: "16em",
 											width: "calc(33% - 1em)",
@@ -263,17 +321,15 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 
 
 						</Row>
-						<Row>
-							<div style={{width:"100%"}}>
-								<ManageDocModal rackUrl={this.state.hrefString} />
+						{this.state.displayFlag == true ?
+							<Row>
+								<div style={{ width: "100%" }}>
+									<ManageDocModal rackUrl={this.state.hrefString} />
 
-							</div>
-						</Row>
+								</div>
+							</Row>
+							: null}
 					</>
-
-
-
-
 					:
 					<div className={styles.container}>
 						Loading

@@ -10,12 +10,19 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import * as strings from 'AtlasBrandDocumentViewerConnectWebPartStrings';
 import AtlasBrandDocumentViewerConnect from './components/AtlasBrandDocumentViewerConnect';
 import { IAtlasBrandDocumentViewerConnectProps } from './components/IAtlasBrandDocumentViewerConnectProps';
-import { IPickerTerms, PrincipalType, PropertyFieldPeoplePicker } from '@pnp/spfx-property-controls';
+// import { PrincipalType, PropertyFieldPeoplePicker } from '@pnp/spfx-property-controls';
 
+import { PropertyFieldPeoplePicker, PrincipalType } from '@pnp/spfx-property-controls/lib/PropertyFieldPeoplePicker';
+// import { IPropertyFieldGroupOrPerson } from "@pnp/spfx-property-controls/lib/PropertyFieldPeoplePicker";
+
+import PnPTelemetry from "@pnp/telemetry-js";
+const telemetry = PnPTelemetry.getInstance();
+telemetry.optOut();
 
 export interface IAtlasBrandDocumentViewerConnectWebPartProps {
 	description: string;
-	terms: IPickerTerms;
+	// terms: IPickerTerms;
+	// people: IPropertyFieldGroupOrPerson[]
 	people: any;
 }
 
@@ -28,7 +35,7 @@ export default class AtlasBrandDocumentViewerConnectWebPart extends BaseClientSi
 				people: this.properties.people,
 				description: this.properties.description,
 				context: this.context,
-				terms: this.properties.terms
+				// terms: this.properties.terms
 			}
 		);
 
@@ -57,18 +64,30 @@ export default class AtlasBrandDocumentViewerConnectWebPart extends BaseClientSi
 								PropertyPaneTextField('description', {
 									label: strings.DescriptionFieldLabel
 								}),
+								// PropertyFieldPeoplePicker('people', {
+								// 	label: 'People Picker',
+								// 	initialData: this.properties.people,
+								// 	allowDuplicate: false,
+								// 	principalType: [PrincipalType.Users, PrincipalType.SharePoint, PrincipalType.Security],
+								// 	onPropertyChange: this.onPropertyPaneFieldChanged,
+								// 	context: this.context as any,
+								// 	properties: this.properties,
+								// 	onGetErrorMessage: null,
+								// 	deferredValidationTime: 0,
+								// 	key: 'peopleFieldId'
+								// }),
 								PropertyFieldPeoplePicker('people', {
-									label: 'People Picker',
+									label: 'PropertyFieldPeoplePicker',
 									initialData: this.properties.people,
 									allowDuplicate: false,
 									principalType: [PrincipalType.Users, PrincipalType.SharePoint, PrincipalType.Security],
 									onPropertyChange: this.onPropertyPaneFieldChanged,
-									context: this.context as any,
+									context: this.context,
 									properties: this.properties,
 									onGetErrorMessage: null,
 									deferredValidationTime: 0,
 									key: 'peopleFieldId'
-								})
+								  })
 							]
 						}
 					]
