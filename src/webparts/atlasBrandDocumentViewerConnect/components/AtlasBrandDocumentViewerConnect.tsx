@@ -61,10 +61,10 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 	}
 
 	public async componentDidMount(): Promise<void> {
-		// let brandID = "Subbrand1647119834538";
+		let brandID = "Subbrand1647119834538";
 		this.getUserGroups2();
 		const myArray = window.location.href.split("/");
-		let brandID = myArray[myArray.length - 1].split(".")[0];
+		// let brandID = myArray[myArray.length - 1].split(".")[0];
 
 		let allTerms = await this.getTermsHierarchy();
 		let allDocs = await this.getAllDocs(brandID);
@@ -129,7 +129,6 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 				}
 			}
 		}
-
 	}
 
 	@autobind
@@ -170,6 +169,21 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		newArr.length > 0 ? finalArr.push(newArr) : null
 		console.log(finalArr);
 		parentTermLabels = [... new Set(parentTermLabels)]
+
+		// pulling out selected term for the spotlight2 
+		let selectedTerm = "Brand Strategy";
+		let indexOfSelectedTerm = parentTermLabels.indexOf(selectedTerm);
+		let removedItem;
+		let removedHeading;
+		if (indexOfSelectedTerm >= 0) {
+			removedItem = finalArr.splice(indexOfSelectedTerm, 1);
+			removedHeading = parentTermLabels.splice(indexOfSelectedTerm, 1);
+		}
+		console.log("Start of new")
+		console.log(removedHeading, removedItem)
+		console.log(parentTermLabels, finalArr)
+		console.log("end of old")
+		//end
 		await this.setState({
 			groupedDataSet: finalArr,
 			parentTermLabels: parentTermLabels
@@ -177,7 +191,6 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 		console.log(this.state.groupedDataSet)
 		console.log(this.state.groupedDataSet.length)
 		console.log(this.state.parentTermLabels)
-
 	}
 
 	@autobind
