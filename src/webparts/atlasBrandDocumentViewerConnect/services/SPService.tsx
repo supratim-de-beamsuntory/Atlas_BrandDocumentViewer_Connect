@@ -68,7 +68,8 @@ export class SPService {
             // let listItems = await sp.web.lists.getByTitle("BrandDocuments").rootFolder.files.expand("ListItemAllFields").filter("ListItemAllFields/SubBrandID eq '" + selectedBrand + "'").get();
 
             const caml: ICamlQuery = {
-                ViewXml: "<View Scope='RecursiveAll'></View>",
+                // ViewXml: "<View Scope='RecursiveAll'><ViewFields><FieldRef Name='Title' /><FieldRef Name='FileLeafRef' /></ViewFields></View>",
+                ViewXml : "<View Scope = 'RecursiveAll'></View>",
                 FolderServerRelativeUrl: `Brand%20Documents/${selectedBrand}`
             };
 
@@ -77,7 +78,7 @@ export class SPService {
             // // log content type name to console
             // console.log(d);
 
-            let listItems = await sp.web.lists.getByTitle("Brand Documents").getItemsByCAMLQuery(caml);
+            let listItems = await sp.web.lists.getByTitle("Brand Documents").getItemsByCAMLQuery(caml, "FileRef");
             // let listItems = await sp.web.lists.getByTitle("Brand Documents").select('Name').getItemsByCAMLQuery(caml);
             // const r: IContentType = await listItems.contentTypes.getById("0x0101").fields();
 

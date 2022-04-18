@@ -65,10 +65,10 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 	}
 
 	public async componentDidMount(): Promise<void> {
-		let brandID = "Subbrand1647119834538";
+		// let brandID = "Subbrand1647119834538";
 		this.getUserGroups2();
 		const myArray = window.location.href.split("/");
-		// let brandID = myArray[myArray.length - 1].split(".")[0];
+		let brandID = myArray[myArray.length - 1].split(".")[0];
 
 		let allTerms = await this.getTermsHierarchy();
 		let allDocs = await this.getAllDocs(brandID);
@@ -325,7 +325,7 @@ export default class AtlasBrandDocumentViewerConnect extends React.Component<IAt
 																			<td style={{
 																				verticalAlign: "bottom"
 																			}}><a
-																				data-interception="off" rel="noopener noreferrer" href={"https://devbeam.sharepoint.com/sites/ModernConnect/_layouts/download.aspx?SourceUrl=" + itemDetail.ServerRelativeUrl} download> <IoMdDownload className={styles.downloadBut} /></a></td>
+																				data-interception="off" rel="noopener noreferrer" href={"https://devbeam.sharepoint.com/sites/ModernConnect/_layouts/download.aspx?SourceUrl=" + itemDetail.FileRef} download> <IoMdDownload className={styles.downloadBut} /></a></td>
 																		</tbody>
 																	))}
 																</Table>
